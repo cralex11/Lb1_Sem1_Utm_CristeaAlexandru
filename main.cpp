@@ -1,7 +1,10 @@
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include <vector>
 #include <bits/stdc++.h>
+#include <string>
+#include<sstream>
+#include<unordered_set>
 
 using namespace std;
 
@@ -19,7 +22,11 @@ void lab1(float x1, float x2, float px, float a, float b, float c);
 
 void lab2();
 
+void lab3();
+
 void lab4();
+
+void lab5();
 
 
 //functii ajutatoare
@@ -31,7 +38,9 @@ int main() {
 
 // lab1(10,20,0.4,2,6,7);
 //    lab2();
-    lab4();
+//    lab3();
+//    lab4();
+//    lab5();
 
 
     return 0;
@@ -133,8 +142,7 @@ void transpose(int **mat, int n) {
 
 // function to sort the matrix row-wise
 // and column-wise
-void sortMatRowAndColWise(int **mat,
-                          int n) {
+void sortMatRowAndColWise(int **mat, int n) {
     // sort rows of mat[][]
     sortByRow(mat, n);
 
@@ -146,6 +154,45 @@ void sortMatRowAndColWise(int **mat,
 
     // again get transpose of mat[][]
     transpose(mat, n);
+}
+
+void printMatrix(vector<vector<float>> matrix, int n, int m) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            cout << setprecision(2) << matrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+vector<vector<float>> uniformizare(vector<vector<float>> matrix, int n, int m) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (i == 0 && j == 0) {
+                matrix[i][j] = (matrix[i][j + 1] + matrix[i + 1][j]) / 2;
+            } else if (i == n - 1 && j == m - 1) {
+                matrix[i][j] = (matrix[i][j - 1] + matrix[i - 1][j]) / 2;
+
+            } else if (i == 0 && j == m - 1) {
+                matrix[i][j] = (matrix[i][j - 1] + matrix[i + 1][j]) / 2;
+
+            } else if (i == n - 1 && j == 0) {
+                matrix[i][j] = (matrix[i][j + 1] + matrix[i - 1][j]) / 2;
+
+            } else if (j == 0) {
+                matrix[i][j] = (matrix[i - 1][j] + matrix[i + 1][j] + matrix[i][j - 1]) / 3;
+            } else if (j == m - 1) {
+                matrix[i][j] = (matrix[i - 1][j] + matrix[i + 1][j] + matrix[i][j + 1]) / 3;
+            } else if (i == 0) {
+                matrix[i][j] = (matrix[i + 1][j] + matrix[j + 1][j] + matrix[i][j - 1]) / 3;
+            } else if (i == n - 1) {
+                matrix[i][j] = (matrix[i - 1][j] + matrix[j + 1][j] + matrix[i][j - 1]) / 3;
+            } else {
+                matrix[i][j] = (matrix[i - 1][j] + matrix[i + 1][j] + matrix[i][j - 1] + matrix[i][j + 1]) / 4;
+            }
+        }
+    }
+return matrix;
 }
 
 
@@ -302,3 +349,66 @@ void lab4() {
 
 
 }
+
+void lab3() {
+    int n, m;
+
+    cout << "Introdu dimensiunea matricei n,m" << endl;
+    cin >> n >> m;
+    vector<vector<float>> matrix(n, vector<float>(m, 0));
+
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++)
+            matrix[i][j] = rand() % 5;
+
+    cout << "\nAfisarea matricei generate aliator\n";
+
+    printMatrix(matrix, n, m);
+
+    matrix = uniformizare(matrix, n ,m);
+
+    cout << "\nAfisarea matricei uniformizate\n";
+    printMatrix(matrix, n, m);
+
+
+}
+
+void lab5() {
+    string str = "testare pentru cuvinte dublicate si stergerea acestor cuvinte , deci sa incepem cuvinte dublicate si stergerea acestor cuvinte"
+                 " prin acesta testare";
+    // desparce cuvintele
+    stringstream ss(str);
+
+    // stocarea cuvintelor
+    unordered_set<string> hash_tab;
+
+    do {
+        string word;
+        ss >> word;
+        cout << word << endl;
+
+
+        // verificare
+        while (hash_tab.find(word) == hash_tab.end()) {
+            cout << word << " ";
+            hash_tab.insert(word);
+        }
+
+    } while (ss);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
